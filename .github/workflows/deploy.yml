@@ -36,14 +36,13 @@ jobs:
         USER: ${{ secrets.USER }}
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ls -la ~/.ssh
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \
+        echo "${{ secrets.PI_SSH_KEY }}" > id_rsa
+        chmod 600 id_rsa
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i $(pwd)/id_rsa -p $SSH_PORT" \
           --exclude=node_modules \
           --exclude=.git \
           ./build/* \
           $USER@$HOST:$TARGET_DIR
 
     - name: Clean up SSH key
-      run: rm -f ~/.ssh/id_rsa
+      run: rm -f id_rsa
