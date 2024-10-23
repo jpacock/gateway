@@ -1,0 +1,47 @@
+name: Deploy to Home Server
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      env:
+          VITE_KEYCLOAK_URL: ${{ secrets.VITE_KEYCLOAK_URL }}
+          VITE_KEYCLOAK_REALM: ${{ secrets.VITE_KEYCLOAK_REALM }}
+          VITE_KEYCLOAK_CLIENT: ${{ secrets.VITE_KEYCLOAK_CLIENT }}
+      run: npm run build
+
+    - name: Copy files to Raspberry Pi
+      env:
+        HOST: ${{ secrets.HOST }}
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        SSH_PORT: ${{ secrets.SSH_PORT }}
+        TARGET_DIR: ${{ secrets.TARGET_DIR }}
+        USER: ${{ secrets.USER }}
+      run: |
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no -p $SSH_PORT" \
+          --exclude=node_modules \
+          --exclude=.git \
+          ./build/* \
+          $USER@$HOST:$TARGET_DIR
+
+    - name: Clean up SSH key
+      run: rm -f ~/.ssh/id_rsa

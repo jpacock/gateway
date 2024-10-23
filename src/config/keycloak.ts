@@ -9,17 +9,13 @@ const keycloakConfig: KeycloakConfig = {
 const keycloak = new Keycloak(keycloakConfig);
 
 export const initKeycloak = (onAuthenticatedCallback: () => void) => {
-  console.log(window.location.origin + '/silent-check-sso.html')
-  
   const initOptions: KeycloakInitOptions = {
     onLoad: 'check-sso',
     enableLogging: true,
-    // silentCheckSsoFallback: false,
     silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-    pkceMethod: 'S256' // Optional, but recommended for security
+    pkceMethod: 'S256'
   };
-
-
+  
   keycloak.init(initOptions).then(authenticated => {
     if (authenticated) {
       console.log('User is authenticated');
@@ -45,7 +41,7 @@ export const initKeycloak = (onAuthenticatedCallback: () => void) => {
 
   keycloak.onAuthRefreshError = () => {
     console.error('Token refresh error');
-    // Handle the error, maybe re-authenticate the user
+
   };
 
   keycloak.onTokenExpired = () => {

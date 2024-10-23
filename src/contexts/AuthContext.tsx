@@ -8,12 +8,14 @@ interface AuthContextProps {
   keycloakInitialized: boolean;
   login: () => void;
   logout: () => void;
+  userInitials: string;
 }
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [keycloakInitialized, setKeycloakInitialized] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userInitials, setUserInitials] = useState('');
   const initRef = useRef(false);
 
   useEffect(() => {
@@ -23,6 +25,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     initKeycloak(() => {
       setIsAuthenticated(keycloak.authenticated ?? false);
       setKeycloakInitialized(true);
+      const { tokenParsed } = keycloak;
+      setUserInitials(tokenParsed ? tokenParsed.name.split(' ').map((str: string) => str[0]).join('') : '');
     });
   }, []);
 
@@ -35,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, keycloakInitialized, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, keycloakInitialized, login, logout, userInitials }}>
       {children}
     </AuthContext.Provider>
   );
