@@ -36,7 +36,7 @@ jobs:
         USER: ${{ secrets.USER }}
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.PI_SSH_KEY }}" > id_rsa
+        echo "${{ secrets.SSH_KEY }}" > id_rsa
         chmod 600 id_rsa
         rsync -avz -e "ssh -o StrictHostKeyChecking=no -i $(pwd)/id_rsa -p $SSH_PORT" \
           --exclude=node_modules \
