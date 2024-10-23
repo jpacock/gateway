@@ -9,7 +9,6 @@ import 'daisyui/dist/full.css';
 import './tailwind-styles.css';
 
 function App() {
-  // Ensure AuthProvider wraps the App component to provide authentication context
   return (
     <AuthProvider>
       <StrictMode>
