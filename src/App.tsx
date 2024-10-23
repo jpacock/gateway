@@ -33,10 +33,21 @@ const  AppContent = () => {
                 <h1 className="text-5xl font-bold">Hi, I'm Jordan</h1>
                 <p className="py-6">Welcome to the place where I create solutions for my everyday life.</p>
                 <div className="flex flex-col space-y-4">
-                  <a href="/jordan-acock-resume-2024-09.pdf" className="btn btn-outline btn-neutral w-96">Resume</a>
-                  <a href="https://www.linkedin.com/in/jordan-acock-8ba91152/" className="btn btn-outline btn-neutral w-96">LinkedIn</a>
-                  <a href="https://jpacock.com/sprinkler" className="btn btn-outline btn-neutral w-96">Sprinklers</a>
-                  <a href="https://jpacock.com/octopi" className="btn btn-outline btn-neutral w-96">OctoPrint</a>
+                  <a href="/jordan-acock-resume-2024-09.pdf" className="btn btn-outline btn-neutral w-96">
+                    <i className="fa-solid fa-file-alt"></i> Resume
+                  </a>
+                  <a href="https://github.com/jpacock" className="btn btn-outline btn-neutral w-96">
+                    <i className="fab fa-github"></i> Github
+                  </a>
+                  <a href="https://www.linkedin.com/in/jordan-acock-8ba91152/" className="btn btn-outline btn-neutral w-96">
+                    <i className="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                  <a href="https://jpacock.com/sprinkler" className="btn btn-outline btn-neutral w-96">
+                    <i className="fas fa-droplet"></i> Sprinklers
+                  </a>
+                  <a href="https://jpacock.com/octopi" className="btn btn-outline btn-neutral w-96">
+                  <i className="fa-brands fa-octopus-deploy"></i> OctoPrint
+                  </a>
                 </div>
               </div>
             }
