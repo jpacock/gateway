@@ -27,6 +27,19 @@ jobs:
           VITE_KEYCLOAK_CLIENT: ${{ secrets.VITE_KEYCLOAK_CLIENT }}
       run: npm run build
 
+    - name: Set up SSH key
+      run: |
+        echo "${{ secrets.SSH_KEY_B64 }}" | base64 -d > id_ed25519
+        chmod 600 id_ed25519
+
+    - name: Test SSH connection
+      env:
+        HOST: ${{ secrets.HOST }}
+        SSH_PORT: ${{ secrets.SSH_PORT }}
+        USER: jordan
+      run: |
+        ssh -v -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "echo Connected"
+
     - name: Copy files to Server
       env:
         HOST: ${{ secrets.HOST }}
@@ -34,10 +47,6 @@ jobs:
         SSH_PORT: ${{ secrets.SSH_PORT }}
         USER: jordan
       run: |
-        echo "${{ secrets.SSH_KEY }}" > id_ed25519
-        chmod 600 id_ed25519
-        cat id_ed25519
-
         TEMP_PATH=/tmp/gateway-deploy
 
         ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "rm -rf $TEMP_PATH && mkdir -p $TEMP_PATH"
