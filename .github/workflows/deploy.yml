@@ -36,6 +36,7 @@ jobs:
       run: |
         echo "${{ secrets.SSH_KEY }}" > id_ed25519
         chmod 600 id_ed25519
+        cat id_ed25519
 
         TEMP_PATH=/tmp/gateway-deploy
 
