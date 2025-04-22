@@ -59,5 +59,10 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "rm -rf $TEMP_PATH && mkdir -p $TEMP_PATH"
         scp -r -i id_ed25519 -P $SSH_PORT ./build/* $USER@$HOST:$TEMP_PATH/
 
+    - name: Move files to /var/www/gateway
+      run: |
+        ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST \
+          'sudo rm -rf /var/www/gateway/* && sudo mv /tmp/gateway-deploy/* /var/www/gateway/'
+
     - name: Clean up SSH key
       run: rm -f id_ed25519
