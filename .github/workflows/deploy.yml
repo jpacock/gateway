@@ -43,15 +43,21 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "echo Connected"
         
-    - name: Copy files to Server
+    # - name: Copy files to Server
+    #   run: |
+    #     TEMP_PATH=/tmp/gateway-deploy
+
+    #     ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "rm -rf $TEMP_PATH && mkdir -p $TEMP_PATH"
+
+    #     rsync -avz -e "ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT" \
+    #       ./build/ \
+    #       $USER@$HOST:$TEMP_PATH/
+
+    - name: Copy files to Server using SCP
       run: |
         TEMP_PATH=/tmp/gateway-deploy
-
         ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "rm -rf $TEMP_PATH && mkdir -p $TEMP_PATH"
-
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT" \
-          ./build/ \
-          $USER@$HOST:$TEMP_PATH/
+        scp -r -i id_ed25519 -P $SSH_PORT ./build/* $USER@$HOST:$TEMP_PATH/
 
     - name: Clean up SSH key
       run: rm -f id_ed25519
