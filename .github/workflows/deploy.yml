@@ -38,11 +38,7 @@ jobs:
 
     - name: Test SSH connection
       run: |
-        ssh -v -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "echo Connected"
-
-    - name: Install rsync on remote server
-      run: |
-        ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "sudo apt-get update && sudo apt-get install -y rsync"
+        ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "echo Connected"
         
     - name: Copy files to Server
       run: |
