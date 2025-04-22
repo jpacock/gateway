@@ -44,7 +44,5 @@ jobs:
         rsync -avz -e "ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT" \
           ./build/ \
           $USER@$HOST:$TEMP_PATH/
-
-        ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "sudo rm -rf /var/www/gateway && sudo mv $TEMP_PATH /var/www/gateway"
     - name: Clean up SSH key
       run: rm -f id_ed25519
