@@ -8,6 +8,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      HOST: ${{ secrets.HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      USER: jordan
+      VITE_KEYCLOAK_URL: ${{ secrets.VITE_KEYCLOAK_URL }}
+      VITE_KEYCLOAK_REALM: ${{ secrets.VITE_KEYCLOAK_REALM }}
+      VITE_KEYCLOAK_CLIENT: ${{ secrets.VITE_KEYCLOAK_CLIENT }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -21,10 +29,6 @@ jobs:
       run: npm install
 
     - name: Build project
-      env:
-          VITE_KEYCLOAK_URL: ${{ secrets.VITE_KEYCLOAK_URL }}
-          VITE_KEYCLOAK_REALM: ${{ secrets.VITE_KEYCLOAK_REALM }}
-          VITE_KEYCLOAK_CLIENT: ${{ secrets.VITE_KEYCLOAK_CLIENT }}
       run: npm run build
 
     - name: Set up SSH key
@@ -33,19 +37,14 @@ jobs:
         chmod 600 id_ed25519
 
     - name: Test SSH connection
-      env:
-        HOST: ${{ secrets.HOST }}
-        SSH_PORT: ${{ secrets.SSH_PORT }}
-        USER: jordan
       run: |
         ssh -v -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "echo Connected"
 
+    - name: Install rsync on remote server
+      run: |
+        ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT $USER@$HOST "sudo apt-get update && sudo apt-get install -y rsync"
+        
     - name: Copy files to Server
-      env:
-        HOST: ${{ secrets.HOST }}
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-        SSH_PORT: ${{ secrets.SSH_PORT }}
-        USER: jordan
       run: |
         TEMP_PATH=/tmp/gateway-deploy
 
@@ -54,5 +53,6 @@ jobs:
         rsync -avz -e "ssh -o StrictHostKeyChecking=no -i id_ed25519 -p $SSH_PORT" \
           ./build/ \
           $USER@$HOST:$TEMP_PATH/
+
     - name: Clean up SSH key
       run: rm -f id_ed25519
