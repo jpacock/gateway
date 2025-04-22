@@ -42,7 +42,7 @@ const  AppContent = () => {
                   <a href="https://www.linkedin.com/in/jordan-acock-8ba91152/" className="btn btn-outline btn-neutral w-96">
                     <i className="fab fa-linkedin"></i> LinkedIn
                     </a>
-                  <a href="https://jpacock.com/sprinkler" className="btn btn-outline btn-neutral w-96">
+                  <a href="https://sprinkler.jpacock.com" className="btn btn-outline btn-neutral w-96">
                     <i className="fas fa-droplet"></i> Sprinklers
                   </a>
                   <a href="https://jpacock.com/octopi" className="btn btn-outline btn-neutral w-96">
